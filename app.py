@@ -1,33 +1,33 @@
 from flask import Flask, render_template, request
 from cryptography.fernet import Fernet
-import mysql.connector
-import json
-
-app = Flask(__name__)
+import psycopg2
 
 # Load encryption key
 with open("secret.txt", "rb") as f:
     key = f.read()
 
-f = Fernet(key)
+fernet = Fernet(key)
 
 # Decrypt password
 with open("encrypted_pass.txt", "rb") as file:
     encrypted_password = file.read()
 
-decrypted_password = f.decrypt(encrypted_password).decode()
+decrypted_password = fernet.decrypt(encrypted_password).decode()
 
-# MySQL config
+app = Flask(__name__)
+
+# Supabase config using decrypted password
 db_config = {
-    "host": "localhost",
-    "user": "root",
+    "user": "postgres.rhnbeekxsnpqcefyybsa",
     "password": decrypted_password,
-    "database": "studentdb"
+    "host": "aws-0-ap-south-1.pooler.supabase.com",
+    "port": "5432",
+    "dbname": "postgres"
 }
 
 @app.route('/')
 def home():
-    return render_template("index.html")
+    return render_template('index.html')
 
 @app.route('/submit', methods=['POST'])
 def submit():
@@ -39,17 +39,19 @@ def submit():
     email = data.get("email")
 
     try:
-        conn = mysql.connector.connect(**db_config)
+        conn = psycopg2.connect(**db_config)
         cur = conn.cursor()
-        query = "INSERT INTO students (name, age, gender, course, email) VALUES (%s, %s, %s, %s, %s)"
-        cur.execute(query, (name, age, gender, course, email))
+        cur.execute(
+            "INSERT INTO students (name, age, gender, course, email) VALUES (%s, %s, %s, %s, %s)",
+            (name, age, gender, course, email)
+        )
         conn.commit()
         cur.close()
         conn.close()
         return {"message": "Success"}, 200
     except Exception as e:
         print("Error:", e)
-        return {"message": "Error saving data"}, 500
+        return {"message": "Database error"}, 500
 
 if __name__ == '__main__':
     app.run(debug=True)
