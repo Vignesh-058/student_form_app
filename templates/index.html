@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Form</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css.css') }}">
+    <script src="{{ url_for('static', filename='js.js') }}" defer></script>
+</head>
+<body>
+    <h1>Student Form</h1>
+
+    <table id="one">
+        <tr>
+            <td class="all"><h4>Name</h4></td>
+            <td class="all"><input type="text" id="name" placeholder="Enter your name"></td>
+        </tr>
+        <tr>
+            <td class="all"><h4>Age</h4></td>
+            <td class="all"><input type="number" id="age" placeholder="Enter your age"></td>
+        </tr>
+        <tr>
+            <td class="all"><h4>Gender</h4></td>
+            <td class="all">
+                <input type="radio" name="gen" id="male" value="Male">Male
+                <input type="radio" name="gen" id="female" value="Female">Female
+            </td>
+        </tr>
+        <tr>
+            <td class="all"><h4>Course</h4></td>
+            <td class="all">
+                <select id="course">
+                    <option>JavaScript</option>
+                    <option>Java</option>
+                    <option>Python</option>
+                    <option>PHP</option>
+                    <option>HTML</option>
+                    <option>CSS</option>
+                    <option>React</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="all"><h4>Email</h4></td>
+            <td class="all"><input type="email" id="email" placeholder="Enter your email"></td>
+        </tr>
+        <tr>
+            <td colspan="2" class="all">
+                <input onclick="handleFormSubmit(event)" type="submit" value="Save">
+            </td>
+        </tr>
+    </table>
+
+    <h2>Submitted Data</h2>
+    <table id="two" border="1">
+        <tr>
+            <th class="all2">NAME</th>
+            <th class="all2">AGE</th>
+            <th class="all2">GENDER</th>
+            <th class="all2">COURSE</th>
+            <th class="all2">EMAIL</th>
+            <th class="all2">ACTION</th>
+        </tr>
+        <!-- Entries will appear here -->
+    </table>
+</body>
+</html>
